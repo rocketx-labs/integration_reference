@@ -63,7 +63,7 @@ export class HistoryComponent implements OnInit {
      navigator.clipboard.writeText(item);
   }
   trimAdd(add:string){
-    this.helper.trimAddress(add);
+    return this.helper.trimAddress(add);
   }
 
 

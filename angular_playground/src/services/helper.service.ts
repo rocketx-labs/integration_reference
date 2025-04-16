@@ -40,7 +40,18 @@ export class HelperService {
 
   
 
-  constructor() { }
+  constructor() {
+    
+   }
+   assignKeys(){
+    let partnerSetting:any=JSON.parse(localStorage.getItem('partner-setting')||'');
+    if(partnerSetting){
+      this.apiKey=partnerSetting.apiKey;
+      this.evmReffererAddress=partnerSetting.evmReferrerAddress;
+      this.solanaReffererAddress=partnerSetting.solanaReferrerAddress;
+    }
+
+   }
   async logoutSub(){
     await this.activeWalletService.logOut()
      this.activeWalletService={};
@@ -116,8 +127,11 @@ export class HelperService {
     }
   }
   trimAddress(add:string){
-    add.slice(0,5)+"...."+add.slice(add.length - 5,add.length);
+    return add.slice(0,5)+"...."+add.slice(add.length - 5,add.length);
 
+  }
+  generateQuotationParams(fromToken:any,fromNetwork:any,toToken:any,toNetwork:any,amount:any){
+   return `/v1/quotation?fromToken=${fromToken.is_native_token?undefined:fromToken.contract_address}&fromNetwork=${fromNetwork.id}&toToken=${toToken.is_native_token?undefined:toToken.contract_address}&toNetwork=${toNetwork.id}&amount=${amount}`
   }
   
 }

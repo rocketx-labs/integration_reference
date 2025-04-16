@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output,  } from '@angular/core';
 import { HelperService } from '../../services/helper.service';
 import { ApiService } from '../../services/api.service';
+import { environment } from '../../environment';
 @Component({
   selector: 'app-quotation',
   imports: [CommonModule],
@@ -16,7 +17,9 @@ export class QuotationComponent implements OnInit {
 
   }
   combination:any={}
+  copied=false
   quotation:any
+  getQuotationSample:string=""
   loading:boolean=false;
   ngOnInit(): void {
       console.log('a',this.quotation)
@@ -43,9 +46,19 @@ export class QuotationComponent implements OnInit {
     console.log(this.quotation)
     this.quotation.quotes[0].selected=true;
     this.helper.activeQuotation.next(this.quotation.quotes[0])
+    this.getQuotationSample=environment.API_URL+this.helper.generateQuotationParams(sourceToken,sourceNetwork,destinationToken,destinationNetwork,amount)
     this.loading=false;
     
     return this.quotation;
+  }
+  copyReq(){
+    
+    navigator.clipboard.writeText(this.getQuotationSample).then(() => {
+      this.copied = true;
+      setTimeout(() => this.copied = false, 1500);
+    });
+    
+
   }
   
 }

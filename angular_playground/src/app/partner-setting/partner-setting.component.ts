@@ -28,6 +28,11 @@ export class PartnerSettingComponent implements OnInit {
     this.helper.apiKey=this.apiKey;
     this.helper.evmReffererAddress=this.evmReffererAddress;
     this.helper.solanaReffererAddress=this.solanaReffererAddress;
+    localStorage.setItem('partner-setting',JSON.stringify({
+      "apiKey":this.apiKey,
+      "evmReferrerAddress":this.evmReffererAddress,
+      "solanaReferrerAddress":this.solanaReffererAddress
+    }))
     this.close.emit()
   }
 

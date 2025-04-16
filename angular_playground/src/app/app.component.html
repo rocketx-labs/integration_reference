@@ -5,12 +5,12 @@
  <app-header (openWalletSelector)="openModal($event)"></app-header>
 
   <main class="container mx-auto px-4 py-8">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div class="lg:col-span-2 bg-gray-800 rounded-xl p-6">
+    <div class=" mt-15  grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class=" max-h-[600px] overflow-y-auto lg:col-span-2 bg-gray-800 rounded-xl p-6">
         <app-quotation   ></app-quotation>
       </div>
       
-      <div class="bg-gray-800 rounded-xl p-6">
+      <div class=" max-h-[600px] overflow-y-auto bg-gray-800 rounded-xl p-6">
        <app-swap-section (openTokenSelector)="openModal($event)" (openWalletSelector)="openModal($event)"(updateCombination)="updateCombination($event)"></app-swap-section>
 
         

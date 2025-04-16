@@ -1,50 +1,104 @@
-<div >
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-bold">Available Routes</h2>
-      <div (click)="refresh()" data-tip="Click here to refresh"  class=" tooltip cursor-pointer text-yellow-500 text-sm"><svg fill="#e8b700" height="20px" width="20px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 383.748 383.748" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M62.772,95.042C90.904,54.899,137.496,30,187.343,30c83.743,0,151.874,68.13,151.874,151.874h30 C369.217,81.588,287.629,0,187.343,0c-35.038,0-69.061,9.989-98.391,28.888C70.368,40.862,54.245,56.032,41.221,73.593 L2.081,34.641v113.365h113.91L62.772,95.042z"></path> <path d="M381.667,235.742h-113.91l53.219,52.965c-28.132,40.142-74.724,65.042-124.571,65.042 c-83.744,0-151.874-68.13-151.874-151.874h-30c0,100.286,81.588,181.874,181.874,181.874c35.038,0,69.062-9.989,98.391-28.888 c18.584-11.975,34.707-27.145,47.731-44.706l39.139,38.952V235.742z"></path> </g> </g></svg></div>
+<div>
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-xl font-bold">Available Routes</h2>
+
+    <div (click)="refresh()" data-tip="Click here to refresh" class=" tooltip cursor-pointer text-yellow-500 text-sm">
+      <svg fill="#e8b700" height="20px" width="20px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 383.748 383.748" xml:space="preserve">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+          <g>
+            <path
+              d="M62.772,95.042C90.904,54.899,137.496,30,187.343,30c83.743,0,151.874,68.13,151.874,151.874h30 C369.217,81.588,287.629,0,187.343,0c-35.038,0-69.061,9.989-98.391,28.888C70.368,40.862,54.245,56.032,41.221,73.593 L2.081,34.641v113.365h113.91L62.772,95.042z">
+            </path>
+            <path
+              d="M381.667,235.742h-113.91l53.219,52.965c-28.132,40.142-74.724,65.042-124.571,65.042 c-83.744,0-151.874-68.13-151.874-151.874h-30c0,100.286,81.588,181.874,181.874,181.874c35.038,0,69.062-9.989,98.391-28.888 c18.584-11.975,34.707-27.145,47.731-44.706l39.139,38.952V235.742z">
+            </path>
+          </g>
+        </g>
+      </svg></div>
+  </div>
+  
+
+  <div *ngIf="!loading &&quotation && quotation.quotes.length>0" class="space-y-4">
+    <div class="bg-gray-800 rounded-xl p-4 text-sm text-gray-300 mb-6 shadow-md">
+      <div class="flex justify-between items-center mb-2">
+        <div class="text-white font-semibold">API Request</div>
+        <!-- Copy Button + Feedback -->
+        <span (click)="copyReq()" class="cursor-pointer text-yellow-400 hover:text-yellow-300 transition relative group">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 18 20" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
+          </svg>
+  
+          <!-- Copied Feedback -->
+          <span *ngIf="copied"
+            class="absolute top-[-30px] left-1/2 transform -translate-x-1/2 text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-md shadow transition-opacity duration-300">
+            Copied!
+          </span>
+        </span>
+  
+      </div>
+  
+      <!-- GET base URL -->
+      <div class="break-words text-yellow-400 font-mono">
+        <span class="text-white">GET</span> {{ getQuotationSample.split('?')[0] }}
+      </div>
+  
+      <!-- Parameters list -->
+      <div *ngIf="getQuotationSample.includes('?')" class="mt-2 space-y-1 pl-3 border-l-2 border-yellow-500">
+        <div *ngFor="let param of getQuotationSample.split('?')[1]?.split('&')" class="font-mono">
+          <span class="text-yellow-400">{{ param.split('=')[0] }}</span>
+          =
+          <span class="text-gray-300">{{ param.split('=')[1] }}</span>
+        </div>
+      </div>
     </div>
-    
-    <div *ngIf="!loading &&quotation && quotation.quotes.length>0" class="space-y-4">
-      <div  *ngFor="let quote of quotation?.quotes" 
-           class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 cursor-pointer"
-           [class.border-2]="quote.selected"
-           [class.border-yellow-500]="quote.selected"
-           (click)="selectQuote(quote)">
-           <div *ngIf="!quote.err && quote.isTxnAllowed">
+    <div *ngFor="let quote of quotation?.quotes" class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 cursor-pointer"
+      [class.border-2]="quote.selected" [class.border-yellow-500]="quote.selected" (click)="selectQuote(quote)">
+      <div *ngIf="!quote.err && quote.isTxnAllowed">
         <div class="flex justify-between items-center">
           <div class="flex items-center space-x-3">
             <img [src]="quote.exchangeInfo.logo" class="h-8 w-8 rounded-full" [alt]="quote.exchangeInfo.logo">
             <span class="font-medium">{{quote.exchangeInfo.title}} ( {{quote.exchangeInfo.exchange_type}})</span>
-            <span class=" bg-yellow-500 rounded-xl flex items-center px-4 p-[2px] text-black" *ngIf="quote.exchangeInfo.walletLess">walletless</span>
+            <span class=" bg-yellow-500 rounded-xl flex items-center px-4 p-[2px] text-black"
+              *ngIf="quote.exchangeInfo.walletLess">walletless</span>
           </div>
           <div class="text-right">
-            <div class="text-lg font-bold">{{quote.fromAmount | number:'1.2-6'}} {{quote.fromTokenInfo.token_symbol}}</div>
-            <div class="text-sm text-gray-400">Expected Output: {{quote.toAmount | number:'1.2-4'}} {{quote.toTokenInfo.token_symbol}}</div>
+            <div class="text-lg font-bold">{{quote.fromAmount | number:'1.2-6'}} {{quote.fromTokenInfo.token_symbol}}
+            </div>
+            <div class="text-sm text-gray-400">Expected Output: {{quote.toAmount | number:'1.2-4'}}
+              {{quote.toTokenInfo.token_symbol}}</div>
           </div>
         </div>
         <div class="mt-2 flex justify-between text-sm text-gray-400">
           <span>Gas Fee: ${{quote.gasFeeUsd|number:'1.0-3'}} </span>
-          <span>Time: ~{{quote.estTimeInSeconds.avg>60?quote.estTimeInSeconds.avg/60:quote.estTimeInSeconds.avg}} {{quote.estTimeInSeconds.avg>60?'min':'sec'}}</span>
+          <span>Time: ~{{quote.estTimeInSeconds.avg>60?quote.estTimeInSeconds.avg/60:quote.estTimeInSeconds.avg}}
+            {{quote.estTimeInSeconds.avg>60?'min':'sec'}}</span>
         </div>
       </div>
-      <div *ngIf="quote.err||!quote.isTxnAllowed" class=" cursor-not-allowed opacity-50" >
+      <div *ngIf="quote.err||!quote.isTxnAllowed" class=" cursor-not-allowed opacity-50">
         <div class="flex justify-between items-center">
           <div class="flex items-center space-x-3">
             <img [src]="quote.exchangeInfo.logo" class="h-8 w-8 rounded-full" [alt]="quote.exchangeInfo.logo">
             <span class="font-medium">{{quote.exchangeInfo.title}}</span>
           </div>
           <div class="text-right">
-            <div class="text-lg font-bold">{{quote.fromAmount | number:'1.2-6'}} {{quote.fromTokenInfo.token_symbol}}</div>
-            <div class="text-sm text-gray-400">Expected Output: {{quote.toAmount | number:'1.2-4'}} {{quote.toTokenInfo.token_symbol}}</div>
+            <div class="text-lg font-bold">{{quote.fromAmount | number:'1.2-6'}} {{quote.fromTokenInfo.token_symbol}}
+            </div>
+            <div class="text-sm text-gray-400">Expected Output: {{quote.toAmount | number:'1.2-4'}}
+              {{quote.toTokenInfo.token_symbol}}</div>
           </div>
         </div>
-        {{quote.err}} 
+        {{quote.err}}
 
-      </div >
       </div>
     </div>
-    
+  </div>
+
 </div>
-<div *ngIf="loading" class=" w-full min-h-screen  inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+
+<div *ngIf="loading" class=" w-full min-h-screen  inset-0  bg-opacity-40 flex items-center justify-center z-50">
   <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
 </div>
