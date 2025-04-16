@@ -44,8 +44,9 @@ export class HelperService {
     
    }
    assignKeys(){
-    let partnerSetting:any=JSON.parse(localStorage.getItem('partner-setting')||'');
-    if(partnerSetting){
+    console.log(typeof(localStorage.getItem('partner-setting')))
+    let partnerSetting:any=typeof(localStorage.getItem('partner-setting'))==='string'?JSON.parse(localStorage.getItem('partner-setting')||""):{};
+    if(!_.isEmpty(partnerSetting)){ 
       this.apiKey=partnerSetting.apiKey;
       this.evmReffererAddress=partnerSetting.evmReferrerAddress;
       this.solanaReffererAddress=partnerSetting.solanaReferrerAddress;
