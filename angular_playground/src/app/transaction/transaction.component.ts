@@ -121,20 +121,7 @@ swapApiRes:any={}
   async swapApiCall(){
     try{
     this.message="Swap Api Initiated"
-    this.swapApiPayload={
-      fee:1,
-      fromTokenId:this.quote.fromTokenInfo.id,
-      toTokenId:this.quote.toTokenInfo.id,
-      amount:this.quote.fromAmount,
-      slippage:1,
-      disableEstimate:false
-
-    } 
-    if(this.quote.exchangeInfo.exchange_type==='DEX'){
-      this.swapApiPayload['referrerAddress']=this.helper.activeCombination.sourceNetwork==='EVM'?this.helper.evmReffererAddress:""
-    }
-        this.swapApiPayload['userAddress'] =this.quote.exchangeInfo.walletLess?undefined:this.helper.activeWalletService.activeWallet;
-        this.swapApiPayload['destinationAddress'] = this.helper.recipientAddress;
+    this.swapApiPayload=this.helper.getswapApiPayoad(this.quote)
         this.swapApiRes=await this.api.swap(this.swapApiPayload);
         if(this.swapApiRes.exchangeInfo.walletLess){
           this.saveToLocal(this.swapApiRes)

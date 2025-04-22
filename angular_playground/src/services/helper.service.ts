@@ -53,6 +53,23 @@ export class HelperService {
     }
 
    }
+  getswapApiPayoad(quote: any) {
+    let swapApiPayload: any = {
+      fee: 1,
+      fromTokenId: quote.fromTokenInfo.id,
+      toTokenId: quote.toTokenInfo.id,
+      amount: quote.fromAmount,
+      slippage: 1,
+      disableEstimate: false
+
+    }
+    if (quote.exchangeInfo.exchange_type === 'DEX') {
+      swapApiPayload['referrerAddress'] = this.activeCombination.sourceNetwork === 'EVM' ? this.evmReffererAddress : ""
+    }
+    swapApiPayload['userAddress'] = quote.exchangeInfo.walletLess ? undefined : this.activeWalletService.activeWallet;
+    swapApiPayload['destinationAddress'] = this.recipientAddress;
+    return swapApiPayload;
+  }
   async logoutSub(){
     await this.activeWalletService.logOut()
      this.activeWalletService={};

@@ -82,5 +82,20 @@
   <button [disabled]="recipientAddress.length===0 && buttonName==='Swap'" (click)="buttonClicked()" [ngClass]="recipientAddress.length===0 && buttonName=='Swap'?'cursor-not-allowed':'cursor-pointer'" class="w-full  py-3 bg-yellow-400 hover:bg-yellow-300 text-black font-semibold rounded-xl transition duration-200">
     {{this.buttonName}}
   </button>
+  <div *ngIf="recipientAddress.length>0" class="bg-gray-800 rounded-md p-4 text-sm text-gray-300">
+    <div class="text-white font-semibold mb-2 flex justify-between items-center">
+      Swap API Payload
+      <span (click)="copyPayload()" class="tooltip cursor-pointer" data-tip="Click to copy payload">
+        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 18 20">
+          <path
+            d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
+        </svg>
+      </span>
+    </div>
+  
+    <div class="bg-gray-900 rounded-md p-3 max-h-[200px] overflow-y-auto text-xs leading-relaxed text-yellow-300 font-mono whitespace-pre-wrap break-all">
+      {{ postQuotationSample | json }}
+    </div>
+  </div>
 </div>
 

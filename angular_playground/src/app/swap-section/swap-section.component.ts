@@ -20,6 +20,9 @@ export class SwapSectionComponent  implements OnInit,OnChanges{
   buttonName="Swap";
   recipientAddress="";
   regexError=false;
+  postQuotationSample={
+    
+  }
   constructor(
     private cd:ChangeDetectorRef,
     private helper:HelperService
@@ -52,7 +55,12 @@ export class SwapSectionComponent  implements OnInit,OnChanges{
  }
  updateRecipientAddress(event:any){
   this.recipientAddress=event.target.value;
-  console.log(this.recipientAddress)
+  this.helper.recipientAddress=this.recipientAddress;
+  
+  if(this.buttonName=='Swap' && this.recipientAddress.length>0){
+    this.postQuotationSample=this.helper.getswapApiPayoad(this.activeQuote)
+  }
+  console.log(this.recipientAddress);
  }
  switchCombination(){
   let comb=_.cloneDeep(this.combination)
@@ -104,7 +112,7 @@ export class SwapSectionComponent  implements OnInit,OnChanges{
       name=this.helper.activeWalletService.chainId===this.combination.sourceNetwork.chainId?'Swap':'Change Network'
     }
     else
-    name= 'Connect Wallet'
+    name='Connect Wallet'
 
     this.buttonName=name;
     this.cd.detectChanges();
@@ -129,5 +137,9 @@ export class SwapSectionComponent  implements OnInit,OnChanges{
         break;
       }
     }
+  }
+  copyPayload(){
+    navigator.clipboard.writeText(JSON.stringify(this.postQuotationSample))
+
   }
 }
