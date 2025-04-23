@@ -57,7 +57,7 @@ export class HistoryComponent implements OnInit {
 
   }
   gettxStatus(){
-    this.status.status;
+    return this.status.status;
   }
   copy(item:string){
      navigator.clipboard.writeText(item);
