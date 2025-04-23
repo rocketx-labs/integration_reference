@@ -44,7 +44,7 @@
         <div class="grid grid-cols-2 gap-4 text-sm">
           <div>
             <p class="text-gray-400">You Send</p>
-            <p class="font-semibold text-white">{{status.latestQuote.fromAmount}} {{status.fromTokenInfo.token_symbol}}</p>
+            <p class="font-semibold text-white">{{status.latestQuote.fromAmount|| status.originTokenAmount}} {{status.fromTokenInfo.token_symbol}}</p>
           </div>
           <div>
             <p class="text-gray-400">Network</p>
@@ -77,7 +77,7 @@
         <div class="grid grid-cols-2 gap-4 text-sm">
           <div>
             <p class="text-gray-400">You Get (Est.)</p>
-            <p class="text-white font-semibold">{{status.latestQuote.toAmount|number:"1.0-3"}} {{status.fromTokenInfo.token_symbol}}</p>
+            <p class="text-white font-semibold">{{status.latestQuote.toAmount|| status.actualAmount|number:"1.0-3"}} {{status.fromTokenInfo.token_symbol}}</p>
           </div>
           <div>
             <p class="text-gray-400">TX ID</p>
