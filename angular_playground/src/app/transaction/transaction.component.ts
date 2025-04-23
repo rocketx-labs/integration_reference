@@ -123,6 +123,10 @@ swapApiRes:any={}
     this.message="Swap Api Initiated"
     this.swapApiPayload=this.helper.getswapApiPayoad(this.quote)
         this.swapApiRes=await this.api.swap(this.swapApiPayload);
+        if(this.swapApiRes.err){
+          this.message=this.swapApiRes.err;
+          return;
+        }
         if(this.swapApiRes.exchangeInfo.walletLess){
           this.saveToLocal(this.swapApiRes)
          this.openActiveHistory(this.swapApiRes.requestId);
