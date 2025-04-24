@@ -152,12 +152,12 @@
           
             <div class="flex justify-between">
               <span class="text-sm">Initial Tx</span>
-              <span class="text-white font-semibold">{{ status.txId }}</span>
+              <span class="text-white font-semibold">{{ trimAdd(status.originTransactionHash) }}</span>
             </div>
           
             <div class="flex justify-between">
               <span class="text-sm">Final Tx</span>
-              <span class="text-white font-semibold">{{ status.txId }}</span>
+              <span class="text-white font-semibold">{{ status.destinationTransactionHash?trimAdd(status.destinationTransactionHash):'--' }}</span>
             </div>
           
             <div class="flex justify-between">

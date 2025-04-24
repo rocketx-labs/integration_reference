@@ -82,7 +82,7 @@
   <button [disabled]="recipientAddress.length===0 && buttonName==='Swap'" (click)="buttonClicked()" [ngClass]="recipientAddress.length===0 && buttonName=='Swap'?'cursor-not-allowed':'cursor-pointer'" class="w-full  py-3 bg-yellow-400 hover:bg-yellow-300 text-black font-semibold rounded-xl transition duration-200">
     {{this.buttonName}}
   </button>
-  <div *ngIf="recipientAddress.length>0" class="bg-gray-800 rounded-md p-4 text-sm text-gray-300">
+  <div *ngIf="recipientAddress.length>0 && ['Swap','Change Network'].includes(this.buttonName)" class="bg-gray-800 rounded-md p-4 text-sm text-gray-300">
     <div class="text-white font-semibold mb-2 flex justify-between items-center">
       Swap API Payload
       <span (click)="copyPayload()" class="tooltip cursor-pointer" data-tip="Click to copy payload">

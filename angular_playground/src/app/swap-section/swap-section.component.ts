@@ -34,6 +34,7 @@ export class SwapSectionComponent  implements OnInit,OnChanges{
     console.log(this.combination)
     this.cd.detectChanges()
     this.getButtonName()
+   this.updateSwapApiPayload()
   }
    combination:any
   @Output() updateCombination=new EventEmitter<any>()
@@ -45,7 +46,9 @@ export class SwapSectionComponent  implements OnInit,OnChanges{
      this.helper.currentChainId.subscribe((val:any)=>{
       this.getButtonName()
      })
-     this.helper.activeQuotation.subscribe((val:any)=>{this.activeQuote=val; this.getButtonName()})
+     this.helper.activeQuotation.subscribe((val:any)=>{this.activeQuote=val;
+      this.updateSwapApiPayload()
+       this.getButtonName()})
      this.helper.currentCombination.subscribe(async (val:any)=>{
       this.combination=val;
       this.getButtonName()
@@ -53,13 +56,16 @@ export class SwapSectionComponent  implements OnInit,OnChanges{
     
 
  }
+ updateSwapApiPayload(){
+  if(['Swap','Change Network'].includes(this.buttonName) && this.recipientAddress.length>0 && (this.activeQuote.exchangeInfo.walletLess||!_.isEmpty(this.helper.activeWalletService))){
+    this.postQuotationSample=this.helper.getswapApiPayoad(this.activeQuote);
+  };
+ }
  updateRecipientAddress(event:any){
   this.recipientAddress=event.target.value;
   this.helper.recipientAddress=this.recipientAddress;
   
-  if(this.buttonName=='Swap' && this.recipientAddress.length>0){
-    this.postQuotationSample=this.helper.getswapApiPayoad(this.activeQuote)
-  }
+  this.updateSwapApiPayload();
   console.log(this.recipientAddress);
  }
  switchCombination(){
@@ -77,8 +83,7 @@ export class SwapSectionComponent  implements OnInit,OnChanges{
     this.helper.updateCombination(this.combination);
   }
   updateAmount(event:any){
-    // console.log(event);
-    // console.log(event.target.value);
+   
     this.combination.amount=event.target.value
     this.helper.updateCombination(this.combination);
   }
