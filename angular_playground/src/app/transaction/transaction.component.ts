@@ -74,9 +74,18 @@ swapApiRes:any={}
         // const revoke = await this.helper.activeWalletService.approveSwap(fromToken,props.allowanceAddress,props.tx?.approveData, 0,preswap);
       }
       const approval = await this.helper.activeWalletService.approveSwap(fromToken,props.allowanceAddress,props.tx?.approveData,fromAmount);
-      this.message="Aalidating approval"
-      await this.checkApproval({contractAddress:this.quote.fromTokenInfo.contract_address,spendor:this.quote.allowanceAddress,activeWallet:this.helper.activeWalletService.activeWallet,tokenDecimal:this.quote.fromTokenInfo?.token_decimals,isNative:!!this.quote.fromTokenInfo?.is_native_token,sourceNetwork:this.helper.activeCombination.sourceNetwork,fromAmount:this.quote.fromAmount},true,false)
-      this.swapApiCall()
+      this.message="Validating approval"
+      let approvalData={
+        contractAddress:preswap?this.quote.fromTokenInfo.contract_address:this.swapApiRes.fromTokenInfo?.contract_address,
+        spendor:preswap?this.quote.allowanceAddress:this.swapApiRes.swap?.allowanceAddress,
+        activeWallet:this.helper.activeWalletService.activeWallet,
+        tokenDecimal:this.quote.fromTokenInfo?.token_decimals,
+        isNative:!!this.quote.fromTokenInfo?.is_native_token,
+        sourceNetwork:this.helper.activeCombination.sourceNetwork,
+        fromAmount:this.quote.fromAmount
+      }
+      await this.checkApproval(approvalData,false)
+      preswap?this.swapApiCall():this.initiateWalletSign()
     }
     catch(e:any){
       console.log('error',e);
@@ -108,6 +117,7 @@ swapApiRes:any={}
         allowed = true
       }
       if(!allowed) {
+        this.swapApiRes.swap.allowanceAddress=this.swapApiRes?.swap?.depositAddress || this.swapApiRes?.swap?.allowanceAddress;
         const props = {
           allowanceAddress : this.quote.allowanceAddress
         }
@@ -132,9 +142,28 @@ swapApiRes:any={}
          this.openActiveHistory(this.swapApiRes.requestId);
          return;
         }
-        if(this.swapApiRes.exchangeInfo.exchange_type==="DEX"){
+        
+           if(this.quote.exchangeInfo.exchange_type==='DEX' && ['JUPITER','RANGO','THORCHAIN'].includes(this.quote.exchangeInfo.keyword) && !this.quote.fromTokenInfo?.is_native_token && !this.excludeChainApproval.includes(this.quote.fromTokenInfo.chainId)){
+            let allowed=false;
+            this.swapApiRes.allowanceAddress = this.swapApiRes.swap?.depositAddress||this.swapApiRes.swap?.allowanceAddress;
+            const approvalResponse = await this.evmUtils.checkAllowance(this.swapApiRes.fromTokenInfo?.contract_address, 
+            this.swapApiRes.allowanceAddress,this.helper.activeWalletService.activeWallet,this.swapApiRes.fromTokenInfo?.token_decimals,
+            !!this.swapApiRes.fromTokenInfo?.is_native_token,this.helper.activeCombination.sourceNetwork);
+            if (approvalResponse && Number(approvalResponse) && Number(approvalResponse) >= this.quote.fromAmount) {
+              allowed = true
+            }
+            if(!allowed) {
+              const props = {
+                allowanceAddress : this.swapApiRes.swap?.allowanceAddress
+              }
+              this.triggerApproval(this.quote.fromTokenInfo,this.swapApiRes,this.quote.fromAmount, Number(approvalResponse),false);
+              return;
+            }
+            
+           
+          }
 
-        }
+        
         if(this.swapApiRes.addressMemo || this.swapApiRes.swap.tx?.memo){
           this.memo = this.swapApiRes.addressMemo || this.swapApiRes.swap.tx?.memo;
         }
@@ -220,7 +249,7 @@ swapApiRes:any={}
     }
 
   }
-  async checkApproval(data:any,preswap:boolean,checkzero:boolean){
+  async checkApproval(data:any,checkzero:boolean){
     
         const approvalResponse = await this.evmUtils.checkAllowance(data.contractAddress, 
           data.spendor,data.activeWallet,data.tokenDecimal,
@@ -228,7 +257,7 @@ swapApiRes:any={}
         if (approvalResponse && Number(approvalResponse) && Number(approvalResponse) >= data.fromAmount) {
           return true
         }
-        else return setTimeout(()=>this.checkApproval(data,preswap,checkzero))
+        else return setTimeout(()=>this.checkApproval(data,checkzero),10000)
     
   }
 

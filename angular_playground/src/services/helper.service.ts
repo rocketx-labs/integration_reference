@@ -44,7 +44,7 @@ export class HelperService {
     
    }
    assignKeys(){
-    console.log(typeof(localStorage.getItem('partner-setting')))
+ 
     let partnerSetting:any=typeof(localStorage.getItem('partner-setting'))==='string'?JSON.parse(localStorage.getItem('partner-setting')||""):{};
     if(!_.isEmpty(partnerSetting)){ 
       this.apiKey=partnerSetting.apiKey;

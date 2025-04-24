@@ -9,7 +9,6 @@ import { QuotationComponent } from './quotation/quotation.component';
 import { ApiService } from '../services/api.service';
 import { HelperService } from '../services/helper.service';
 import { WalletselectComponent } from './walletselect/walletselect.component';
-import { SignalService } from '../services/signal.service';
 import { ModalComponent } from './modal/modal.component';
 import _ from 'lodash'
 
@@ -30,12 +29,11 @@ export class AppComponent implements OnInit  {
   quotation:any;
   activequotation:any;
   constructor(
-    private signalService:SignalService,
+   
     private api:ApiService,
     public helper:HelperService
   ){
-    this.wsignal=this.signalService.showWalletSelect;
-    console.log(this.showWalletPopup)
+   
   }
   title = 'angular_playground';
   showWalletPopup=false;
@@ -64,7 +62,6 @@ export class AppComponent implements OnInit  {
       this.loading=false}) 
   }
   updateCombination(combination:any){
-    console.log(combination);
     this.quotation();
   }
   updateActiveQuotation(quote:any){
@@ -82,11 +79,10 @@ export class AppComponent implements OnInit  {
     this.helper.allConfig=configs;
     this.helper.setDefaultCoin(coins);
     
-    console.log(this.combination);
+   
     
     this.loading=false;
-    console.log(configs);
-    console.log(coins);
+   
   }
 
 }
