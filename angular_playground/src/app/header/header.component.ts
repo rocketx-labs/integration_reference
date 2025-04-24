@@ -21,7 +21,6 @@ export class HeaderComponent implements OnInit {
   currentNetwork:any={}
   activeWallet=""
   updateWalletPopup(){
-    console.log("triggere")
     this.openWalletSelector.emit('walletSelector')
   }
   ngOnInit(): void {

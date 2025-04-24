@@ -22,7 +22,7 @@ export class QuotationComponent implements OnInit {
   getQuotationSample:string=""
   loading:boolean=false;
   ngOnInit(): void {
-      console.log('a',this.quotation)
+    
      
       this.helper.currentCombination.subscribe((val:any)=>{
        this.combination=val;
@@ -43,7 +43,7 @@ export class QuotationComponent implements OnInit {
     this.loading=true;
     const{sourceNetwork,destinationNetwork,sourceToken,destinationToken,amount}=this.combination
     this.quotation=await this.api.getQuotes(sourceToken,sourceNetwork,destinationToken,destinationNetwork,amount)
-    console.log(this.quotation)
+   
     this.quotation.quotes[0].selected=true;
     this.helper.activeQuotation.next(this.quotation.quotes[0])
     this.getQuotationSample=environment.API_URL+this.helper.generateQuotationParams(sourceToken,sourceNetwork,destinationToken,destinationNetwork,amount)
