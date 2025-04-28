@@ -1,6 +1,6 @@
-# intregation_playground
 
-# Integration Playground
+
+# Integration Reference
 
  The Angular application lives inside the `angular_playground` folder.
 
