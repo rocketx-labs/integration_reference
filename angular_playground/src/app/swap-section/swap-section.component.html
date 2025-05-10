@@ -56,6 +56,7 @@
       (blur)="updateRecipientAddress($event)"
       class="w-full p-3 bg-gray-800 text-white rounded-xl placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400"
     />
+    <label class=" text-red-400" *ngIf="activeQuote?.exchangeInfo?.keyword=='JUPITER'">recipient address should be same as source address in case of jupiter</label>
   </div>
 
   <!-- Price Details -->

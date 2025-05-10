@@ -30,8 +30,7 @@ export class SwapSectionComponent  implements OnInit,OnChanges{
 
   }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes)
-    console.log(this.combination)
+  
     this.cd.detectChanges()
     this.getButtonName()
    this.updateSwapApiPayload()
@@ -41,7 +40,7 @@ export class SwapSectionComponent  implements OnInit,OnChanges{
   @Output() openTokenSelector=new EventEmitter<any>()
   activeQuote:any
  ngOnInit(): void {
-     console.log(this.combination)
+    
      this.combination=this.helper.activeCombination;
      this.helper.currentChainId.subscribe((val:any)=>{
       this.getButtonName()
@@ -66,7 +65,7 @@ export class SwapSectionComponent  implements OnInit,OnChanges{
   this.helper.recipientAddress=this.recipientAddress;
   
   this.updateSwapApiPayload();
-  console.log(this.recipientAddress);
+ 
  }
  switchCombination(){
   let comb=_.cloneDeep(this.combination)
@@ -127,13 +126,13 @@ export class SwapSectionComponent  implements OnInit,OnChanges{
     switch(this.buttonName){
       case 'Swap':{
         this.helper.selectedQuote=this.activeQuote;
-        console.log('rec',this.recipientAddress)
+       
         this.helper.recipientAddress=this.recipientAddress;
         this.openWalletSelector.emit('initiateTransaction');
         break;
       }
       case 'Change Network':{
-        console.log("change Network");
+       
         this.helper.changeSourceNetworkByUser(this.combination.sourceNetwork);
         break;
       }

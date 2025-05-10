@@ -64,12 +64,18 @@ export class HelperService {
 
     }
     if (quote.exchangeInfo.exchange_type === 'DEX') {
-      swapApiPayload['referrerAddress'] = this.activeCombination.sourceNetwork === 'EVM' ? this.evmReffererAddress : ""
+      swapApiPayload['referrerAddress'] = this.getReferrerAddress(this.activeCombination.sourceNetwork.type === 'EVM' ?'EVM': this.activeCombination.sourceNetwork.chainId)
     }
     swapApiPayload['userAddress'] = quote.exchangeInfo.walletLess ? undefined : this.activeWalletService.activeWallet;
     swapApiPayload['destinationAddress'] = this.recipientAddress;
     return swapApiPayload;
   }
+  getReferrerAddress(type:any){
+    if(type==='EVM')  return this.evmReffererAddress
+    else if(type==='0x11') return this.solanaReffererAddress;
+    return ""
+  }
+  
   async logoutSub(){
     await this.activeWalletService.logOut()
      this.activeWalletService={};

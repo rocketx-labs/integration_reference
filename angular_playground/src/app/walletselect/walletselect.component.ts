@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FilterPipe } from '../../helper/filter.pipe';
 import { FormsModule } from '@angular/forms';
 import { EvmService } from '../../networks/evm.service';
+import { SolanaService } from '../../networks/solana.service';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-walletselect',
@@ -15,7 +17,8 @@ export class WalletselectComponent implements OnInit {
   @Output() close=new EventEmitter<boolean>();
   constructor(
     public helper:HelperService,
-    public evmService:EvmService
+    public evmService:EvmService,
+    public solanaService:SolanaService
   ){
 
   }
@@ -34,17 +37,18 @@ export class WalletselectComponent implements OnInit {
     {
       id:2,
       title:"Phantom",
-      keyword:"phantom",
+      keyword:"solana",
       type:"solana",
-      logo:'./../img/Browser.png'
-    },
-    {
-      id:3,
-      title:"Kepler",
-      keyword:"keplr",
-      type:"cosmos",
-      logo:'./../img/Browser.png'
-    }]
+      logo:'https://docs.phantom.com/~gitbook/image?url=https%3A%2F%2F187760183-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-MVOiF6Zqit57q_hxJYp%252Fuploads%252FHEjleywo9QOnfYebBPCZ%252FPhantom_SVG_Icon.svg%3Falt%3Dmedia%26token%3D71b80a0a-def7-4f98-ae70-5e0843fdaaec&width=768&dpr=2&quality=100&sign=a9739ffb&sv=2'
+    }
+    // {
+    //   id:3,
+    //   title:"Kepler",
+    //   keyword:"keplr",
+    //   type:"cosmos",
+    //   logo:'./../img/Browser.png'
+    // }
+  ]
   activeNetwork={
     block_explorer_url: "https://etherscan.io/",
   "buy_enabled":1,
@@ -73,7 +77,7 @@ export class WalletselectComponent implements OnInit {
 
     try {
       let configs:any = this.helper.allConfig;
-      this.selectedNetwork=this.activeNetwork
+      this.selectedNetwork=this.helper.activeCombination.sourceNetwork;
       this.selectNetwork(this.selectedNetwork)
      
 
@@ -124,23 +128,22 @@ export class WalletselectComponent implements OnInit {
     
   }
   async selectWallet(wallet:any){
-    console.log(wallet)
     this.assignWallet(wallet)
   }
   exit(){
-    console.log("exit triggered")
+   
     this.close.emit(true)
   }
   public async assignWallet(wallet:string,network:string='',suppressCatchErrorAction:boolean=false, modal: any=null){
     try {
       // disconnect if anything already connected
-      if(this.helper.activeWalletService)this.helper.logoutSub()    
+      if(!_.isEmpty(this.helper.activeWalletService))this.helper.logoutSub()    
       switch(wallet) {
       case 'evm':{
         this.helper.activeWalletService=this.evmService;
         let account=await this.helper.activeWalletService.getAccounts();
         if(account && account.length > 0) {
-          console.log(account)
+         
           await this.helper.updateAddress(account)
           await this.helper.getChainId();
           this.helper.activeWalletService.activeWallet = account;
@@ -155,9 +158,28 @@ export class WalletselectComponent implements OnInit {
           
       }
     break;
-
-
       }
+      case 'solana':{
+        this.helper.activeWalletService=this.solanaService;
+        let account=await this.helper.activeWalletService.getAccounts();
+        if(account && account.length > 0) {
+         
+          await this.helper.updateAddress(account)
+          await this.helper.getChainId();
+          this.helper.activeWalletService.activeWallet = account;
+          
+            if(this.helper.activeWalletService)this.helper.activeWalletService.initiate();
+            if(network){
+              try{
+                this.helper.changeSourceNetworkByUser(network);
+              }catch(e){
+              }
+            }
+          
+      }
+    break;
+      }
+
     }
     this.exit()
     } catch (err:any) {
