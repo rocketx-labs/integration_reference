@@ -117,7 +117,7 @@ swapApiRes:any={}
         allowed = true
       }
       if(!allowed) {
-        this.swapApiRes.swap.allowanceAddress=this.swapApiRes?.swap?.depositAddress || this.swapApiRes?.swap?.allowanceAddress;
+        // this.swapApiRes.swap.allowanceAddress=this.swapApiRes?.swap?.depositAddress || this.swapApiRes?.swap?.allowanceAddress;
         const props = {
           allowanceAddress : this.quote.allowanceAddress
         }
