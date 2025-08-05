@@ -58,6 +58,7 @@ export class SolanaService {
     if(token.exchangeInfo?.exchange_type==='DEX'){
       return this.initiateDexTx(txObj,token,srctokn,trgtokn,depositAddress)
     }
+    // cex flow
     if (srctokn.is_native_token) {
       let transaction: any = {};
 
